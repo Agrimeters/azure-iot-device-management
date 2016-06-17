@@ -19,6 +19,8 @@ import * as iothub from 'azure-iothub';
 import Registry = iothub.Registry;
 import Device = iothub.Device;
 
+const sixpack = require('sixpack-client');
+
 let converter = require('json-2-csv');
 let multipart = require('connect-multiparty');
 
@@ -138,12 +140,28 @@ export class DeviceAPI {
     QueryDevices(req: Request, res: Response & hal.Response, next) {
         var query: QueryExpression = req.body;
 
-        this.registry.queryDevices(query, function(error, result) {
-            if (error) {
-                return next(error);
-            }
-            res.json({ _results: result });
+        const session = new sixpack.Session({
+            base_url: 'http://docker:5001'
         });
+
+        console.log('MAKING REQUEST TO SIXPACK...');
+        session.participate(
+            'query-gets', 
+            ['alt1', 'alt2'], 
+            (err, res) =>  {
+                if (err) {
+                    console.log(`SIXPACK RETURN ERROR ${err}`);
+                    return next(err);
+                }
+
+                console.log(`SIXPACK RETURNED RESPONSE ${JSON.stringify(res)}`);
+                this.registry.queryDevices(query, function(error, result) {
+                            if (error) {
+                                return next(error);
+                            }
+                            res.json({ _results: result });
+                        });
+            });        
     };
 
     @route(Method.POST, '/')
