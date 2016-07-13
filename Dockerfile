@@ -1,4 +1,6 @@
-FROM node:6-slim
+# Use base image running node on alpine linux to minimize image size.
+# This is an unofficial image, but is well maintained and widely used.
+FROM mhart/alpine-node:6
 
 # Create app directories
 RUN mkdir -p /app

@@ -4,7 +4,7 @@
     "node": "6.1.0"
   },
   "name": "@azure-iot/device-management",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "scripts": {
     "prebuild": "gulp install",

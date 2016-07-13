@@ -3,7 +3,7 @@
 
 # Non-runtime directories
 node_modules/
-typings/
+**/typings/
 dist/app/maps/
 dist/server/maps/
 dist/test/
